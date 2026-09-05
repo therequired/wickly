@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- Cấu hình loại bỏ Referrer để tránh bị TikTok CDN chặn hiển thị Avatar -->
+  <meta name="referrer" content="no-referrer">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TikTok Cyber Booster v5.2 VIP</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -134,7 +137,7 @@
       gap: 6px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 5px;
+      padding: 8px 10px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -145,13 +148,10 @@
       background: rgba(255, 215, 0, 0.08);
       box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
     }
-
-    .recent-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-cyan); }
-    .vip-target .recent-avatar { border: 1px solid var(--accent-gold); }
     
-    .recent-info { flex: 1; display: flex; align-items: center; gap: 3px; overflow: hidden; }
-    .recent-name { font-size: 10px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .badge-tick { font-size: 9px; color: var(--accent-cyan); }
+    .recent-info { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 3px; overflow: hidden; }
+    .recent-name { font-size: 11px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge-tick { font-size: 10px; color: var(--accent-cyan); }
     .badge-tick.vip { color: var(--accent-gold); text-shadow: 0 0 5px var(--accent-gold); }
 
     /* Right Main Area */
@@ -218,10 +218,11 @@
       max-width: 500px;
     }
 
+    /* Đã giảm kích thước Avatar chính xuống 10% (từ 207px -> 186px) */
     .avatar-wrapper {
       position: relative;
-      width: 207px;
-      height: 207px;
+      width: 186px;
+      height: 186px;
       border-radius: 50%;
       margin-bottom: 12px;
       background: #000;
@@ -421,7 +422,8 @@
       <div id="targetDisplay" class="target-display">
         <div id="avatarWrapper" class="avatar-wrapper">
           <div class="gold-shimmer-sweep"></div>
-          <img id="giantAvatar" class="giant-avatar" src="" alt="Target Avatar">
+          <!-- Avatar cố định sử dụng file images/avata.png -->
+          <img id="giantAvatar" class="giant-avatar" src="images/avata.png" alt="Target Avatar">
 
           <!-- Boost Loading Overlay -->
           <div id="boostStatusBox" class="boost-status-box">
@@ -438,7 +440,8 @@
           </div>
         </div>
         
-        <h2 id="targetNickname" style="font-size: 20px;">Nickname</h2>
+        <!-- Đã tăng kích thước tên người dùng 10% (từ 20px -> 22px) -->
+        <h2 id="targetNickname" style="font-size: 22px;">Nickname</h2>
         <p id="targetHandle" style="color: var(--accent-cyan); font-size: 12px; margin-top: 2px;">@username</p>
 
         <!-- Stats Grid -->
@@ -490,7 +493,7 @@
 
   <script>
     const AUTHORIZED_USERS = [
-      { user: 'Roiseso', pass: '111111' },
+      { user: 'Roiseso', pass: 'r123' },
       { user: 'matrix_operator', pass: '123456' },
       { user: 'quantum_booster', pass: '123456' },
       { user: 'alpha_tester', pass: '123456' },
@@ -549,7 +552,6 @@
       document.getElementById('loginPass').value = '';
     }
 
-    /* LẤY TÊN THẬT VÀ AVATAR THẬT BẰNG TIKTOK OEMBED API */
     async function fastScanUser(manualUsername = null) {
       let username = manualUsername || document.getElementById('targetUsername').value.trim();
       if (username.startsWith('@')) username = username.substring(1);
@@ -560,19 +562,16 @@
 
       currentTargetUser = username;
 
-      // Đường dẫn API OEmbed chính thức của TikTok
       const targetProfileUrl = `https://www.tiktok.com/@${username}`;
       const oembedApi = `https://www.tiktok.com/oembed?url=${encodeURIComponent(targetProfileUrl)}`;
 
       let realName = username;
-      let realAvatar = `https://ui-avatars.com/api/?name=${username}&background=00f2fe&color=000&bold=true`;
 
       try {
         const response = await fetch(oembedApi);
         if (response.ok) {
           const data = await response.json();
-          if (data.author_name) realName = data.author_name;       // Tên hiển thị thực tế
-          if (data.thumbnail_url) realAvatar = data.thumbnail_url;  // Avatar thực tế
+          if (data.author_name) realName = data.author_name;
         }
       } catch (error) {
         console.warn('Không lấy được dữ liệu chính thức, dùng dữ liệu mặc định:', error);
@@ -580,7 +579,6 @@
 
       btnScan.classList.remove('scanning');
 
-      // Random các thông số phụ (Followers/Likes)
       const followerVal = Math.floor(Math.random() * (110 - 7 + 1)) + 7;
       const followingVal = Math.floor(Math.random() * (650 - 57 + 1)) + 57;
       const likesVal = Math.floor(Math.random() * (210 - 10 + 1)) + 10;
@@ -588,7 +586,6 @@
       currentProfileData = {
         username: username,
         realName: realName,
-        avatar: realAvatar,
         followers: followerVal + 'K',
         following: followingVal,
         likes: likesVal + 'K'
@@ -602,13 +599,8 @@
       currentTargetUser = data.username;
       
       const giantAvatarEl = document.getElementById('giantAvatar');
-      giantAvatarEl.src = data.avatar;
-      
-      giantAvatarEl.onerror = function() {
-        this.src = `https://ui-avatars.com/api/?name=${data.username}&background=00f2fe&color=000&bold=true`;
-      };
+      giantAvatarEl.src = 'images/avata.png';
 
-      // Hiển thị tên hiển thị thật thay vì username
       document.getElementById('targetNickname').innerText = data.realName || data.username;
       document.getElementById('targetHandle').innerText = `@${data.username}`;
       document.getElementById('statFollowers').innerText = data.followers;
@@ -619,12 +611,11 @@
       document.getElementById('targetDisplay').style.display = 'flex';
     }
 
-    function addRecentTarget(username, realName, avatarUrl, boosted = false, isVip = false) {
+    function addRecentTarget(username, realName, boosted = false, isVip = false) {
       recentTargets.unshift({ 
         id: Date.now() + Math.random(),
         username: username, 
         realName: realName,
-        avatar: avatarUrl, 
         boosted: boosted, 
         isVip: isVip 
       });
@@ -635,6 +626,7 @@
       renderRecentList();
     }
 
+    /* Rendering danh sách bên trái: Đã hủy avatar, chỉ giữ tên và hiệu ứng */
     function renderRecentList() {
       const container = document.getElementById('recentList');
       container.innerHTML = '';
@@ -656,10 +648,7 @@
             : `<i class="fa-solid fa-circle-check badge-tick" title="Boosted"></i>`;
         }
 
-        const fallback = `https://ui-avatars.com/api/?name=${item.username}&background=00f2fe&color=000&bold=true`;
-
         div.innerHTML = `
-          <img class="recent-avatar" src="${item.avatar}" onerror="this.src='${fallback}'">
           <div class="recent-info">
             <span class="recent-name" title="${item.realName || item.username}">${item.realName || '@' + item.username}</span>
             ${badgeHtml}
@@ -740,7 +729,7 @@
         showIosNotification(isVip ? `VIP Enhancement active for @${currentTargetUser}` : `Account Upgrade complete for @${currentTargetUser}`);
         statusBox.classList.remove('active');
 
-        addRecentTarget(currentTargetUser, currentProfileData.realName, currentProfileData.avatar, true, isVip);
+        addRecentTarget(currentTargetUser, currentProfileData.realName, true, isVip);
         document.getElementById('targetUsername').value = '';
 
       }, totalDuration + 400);
