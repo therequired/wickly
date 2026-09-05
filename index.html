@@ -1,1 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Cyber Booster v5.2 VIP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #06080d;
+      --card-bg: rgba(13, 19, 31, 0.85);
+      --accent-cyan: #00f2fe;
+      --accent-magenta: #ff0050;
+      --accent-green: #00ff88;
+      --accent-gold: #ffd700;
+      --accent-purple: #9d4edd;
+      --text-main: #f0f4f8;
+      --text-sub: #8a99ad;
+      --border-color: rgba(0, 242, 254, 0.25);
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.1), transparent 70%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+    }
+
+    /* iOS Top Push Notification */
+    .ios-notification {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 380px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      color: #000;
+      padding: 12px 16px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .ios-notification.show { top: 15px; }
+    .ios-icon { width: 36px; height: 36px; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 18px; }
+    .ios-content { flex: 1; }
+    .ios-title { font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
+    .ios-time { font-size: 10px; color: #666; font-weight: normal; }
+    .ios-body { font-size: 12px; color: #333; margin-top: 2px; }
+
+    /* Header */
+    header {
+      padding: 15px 20px;
+      background: rgba(6, 8, 13, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .logo { font-size: 20px; font-weight: 800; letter-spacing: 1.5px; color: var(--accent-cyan); text-shadow: 0 0 10px var(--accent-cyan); }
+
+    /* Layout Wrapper */
+    .app-layout {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      padding: 15px 20px 60px 10px;
+      gap: 20px;
+      position: relative;
+    }
+
+    /* Left Sidebar */
+    .sidebar-history {
+      width: 180px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+      height: calc(100vh - 160px);
+      margin-top: 50px;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.08);
+    }
+    .sidebar-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
+      padding-left: 4px;
+    }
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .recent-list::-webkit-scrollbar { width: 5px; }
+    .recent-list::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 10px; }
+    .recent-list::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent-cyan), rgba(0, 114, 255, 0.8));
+      border-radius: 10px;
+      box-shadow: 0 0 6px var(--accent-cyan);
+    }
+    .recent-list::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
+
+    .recent-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .recent-item:hover { background: rgba(0, 242, 254, 0.1); border-color: var(--accent-cyan); }
+    .recent-item.vip-target {
+      border: 1px solid var(--accent-gold);
+      background: rgba(255, 215, 0, 0.08);
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+    }
+
+    .recent-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-cyan); }
+    .vip-target .recent-avatar { border: 1px solid var(--accent-gold); }
+    
+    .recent-info { flex: 1; display: flex; align-items: center; gap: 3px; overflow: hidden; }
+    .recent-name { font-size: 10px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge-tick { font-size: 9px; color: var(--accent-cyan); }
+    .badge-tick.vip { color: var(--accent-gold); text-shadow: 0 0 5px var(--accent-gold); }
+
+    /* Right Main Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-right: 180px;
+    }
+
+    .compact-search { max-width: 480px; width: 100%; margin-bottom: 20px; }
+    .search-box {
+      display: flex;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 4px 6px 4px 18px;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.15);
+    }
+    .search-box input { flex: 1; background: transparent; border: none; color: #fff; font-size: 14px; outline: none; }
+
+    /* Nút Scan */
+    .btn-scan {
+      position: relative;
+      background: linear-gradient(135deg, var(--accent-cyan), #0072ff);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      padding: 8px 22px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 13px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+    }
+    .btn-scan::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -150%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+      transform: rotate(25deg);
+      transition: none;
+    }
+    .btn-scan.scanning::after {
+      animation: scanLightSweep 0.8s ease-in-out infinite;
+    }
+    @keyframes scanLightSweep {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    /* Target Display */
+    .target-display {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 207px;
+      height: 207px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+      background: #000;
+      border: 4px solid var(--accent-cyan);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+      transition: all 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .giant-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; transition: all 0.5s ease; }
+
+    .gold-shimmer-sweep {
+      position: absolute;
+      top: -50%;
+      left: -150%;
+      width: 80%;
+      height: 200%;
+      background: linear-gradient(
+        60deg, 
+        transparent 20%, 
+        rgba(255, 215, 0, 0.2) 40%, 
+        rgba(255, 255, 255, 0.9) 50%, 
+        rgba(255, 215, 0, 0.2) 60%, 
+        transparent 80%
+      );
+      transform: rotate(25deg);
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .avatar-wrapper.effect-vip .gold-shimmer-sweep { opacity: 1; animation: sweepShimmer 1.8s infinite; }
+    @keyframes sweepShimmer { 0% { left: -150%; } 100% { left: 150%; } }
+
+    .boost-status-box {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      background: rgba(6, 8, 13, 0.94);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 15px;
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .boost-status-box.active { opacity: 1; pointer-events: auto; }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      font-family: monospace;
+    }
+    .status-row.glitching .badge { color: var(--accent-cyan); animation: blinkGlitch 0.15s infinite; }
+    .status-row.done { color: var(--accent-green); }
+
+    @keyframes blinkGlitch {
+      0% { opacity: 1; transform: translateX(0); }
+      50% { opacity: 0.5; transform: translateX(1px); }
+      100% { opacity: 1; transform: translateX(-1px); }
+    }
+
+    .vip-counter-box { display: none; flex-direction: column; align-items: center; gap: 5px; }
+    .vip-counter-number { font-size: 34px; font-weight: 900; color: var(--accent-gold); text-shadow: 0 0 15px var(--accent-gold); font-family: monospace; }
+    .vip-counter-label { font-size: 9px; color: #fff; letter-spacing: 1.2px; font-weight: 700; }
+
+    .avatar-wrapper.effect-standard { border-color: var(--accent-cyan); box-shadow: 0 0 35px var(--accent-cyan); }
+    .avatar-wrapper.effect-vip { border-color: var(--accent-gold); box-shadow: 0 0 45px var(--accent-gold), 0 0 80px var(--accent-magenta); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 90%; max-width: 405px; margin: 12px 0 20px 0; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 7px 5px; border-radius: 8px; text-align: center; }
+    .stat-value { font-size: 14px; font-weight: 700; color: var(--accent-cyan); }
+    .stat-label { font-size: 9px; color: var(--text-sub); margin-top: 2px; }
+
+    .action-panel { display: flex; gap: 15px; width: 100%; max-width: 490px; justify-content: center; }
+    .btn-act {
+      flex: 1; border: none; color: #fff; font-weight: 800; padding: 15px 18px; border-radius: 14px; cursor: pointer; transition: 0.3s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px;
+    }
+    .btn-act:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    .btn-standard { background: linear-gradient(135deg, var(--accent-cyan), #0072ff); color: #000; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+    .btn-vip { background: linear-gradient(135deg, var(--accent-gold), #ff6a00); color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+
+    /* Bottom Control Bar */
+    .bottom-control-bar {
+      position: fixed;
+      bottom: 12px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      background: rgba(6, 8, 13, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logout-btn-only {
+      background: rgba(255, 0, 80, 0.15);
+      border: 1px solid var(--accent-magenta);
+      color: var(--accent-magenta);
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .logout-btn-only:hover {
+      background: var(--accent-magenta);
+      color: #fff;
+      box-shadow: 0 0 10px var(--accent-magenta);
+    }
+
+    .btn-reset-data {
+      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.6); font-size: 10px; padding: 5px 10px; border-radius: 12px; cursor: pointer; transition: all 0.3s;
+    }
+    .btn-reset-data:hover { background: var(--accent-magenta); color: #fff; border-color: var(--accent-magenta); }
+
+    /* Modal Login */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); width: 90%; max-width: 360px; padding: 25px; border-radius: 18px; text-align: center; }
+    .form-group { margin-bottom: 12px; text-align: left; }
+    .form-group label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
+    .form-group input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; color: #fff; outline: none; }
+    
+    .login-contact-note {
+      font-size: 10px;
+      color: var(--accent-cyan);
+      margin-top: 14px;
+      letter-spacing: 0.3px;
+      opacity: 0.85;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .app-layout { flex-direction: column; }
+      .sidebar-history { width: 100%; max-height: 180px; margin-top: 0; }
+      .main-content { margin-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- iOS Push Notification -->
+  <div id="iosNotification" class="ios-notification">
+    <div class="ios-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <div class="ios-content">
+      <div class="ios-title"><span>System Alert</span><span class="ios-time">Just now</span></div>
+      <div id="iosBody" class="ios-body">Power Boost Successfully Delivered!</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><i class="fa-solid fa-atom"></i> TIKPOWER AI</div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="app-layout">
+    
+    <!-- Left Sidebar -->
+    <aside class="sidebar-history">
+      <div class="sidebar-title">
+        <i class="fa-solid fa-clock-rotate-left"></i> RECENT TARGETS
+      </div>
+      <div id="recentList" class="recent-list"></div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <div class="compact-search">
+        <div class="search-box">
+          <input type="text" id="targetUsername" placeholder="Enter TikTok username..." onkeypress="handleScanKeyPress(event)">
+          <button id="btnScan" class="btn-scan" onclick="fastScanUser()"><i class="fa-solid fa-bolt"></i> SCAN</button>
+        </div>
+      </div>
+
+      <div id="targetDisplay" class="target-display">
+        <div id="avatarWrapper" class="avatar-wrapper">
+          <div class="gold-shimmer-sweep"></div>
+          <img id="giantAvatar" class="giant-avatar" src="" alt="Target Avatar">
+
+          <!-- Boost Loading Overlay -->
+          <div id="boostStatusBox" class="boost-status-box">
+            <div id="standardStatusRows" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div id="rowFollower" class="status-row"><span>Followers</span><span class="badge">[0x000]</span></div>
+              <div id="rowViewer" class="status-row"><span>Viewers</span><span class="badge">[0x000]</span></div>
+              <div id="rowLike" class="status-row"><span>Likes</span><span class="badge">[0x000]</span></div>
+            </div>
+
+            <div id="vipCounterBox" class="vip-counter-box">
+              <div id="vipCounterNumber" class="vip-counter-number">0%</div>
+              <div class="vip-counter-label"><i class="fa-solid fa-shield-halved"></i> VIP SHIELD CHARGING</div>
+            </div>
+          </div>
+        </div>
+        
+        <h2 id="targetNickname" style="font-size: 20px;">Nickname</h2>
+        <p id="targetHandle" style="color: var(--accent-cyan); font-size: 12px; margin-top: 2px;">@username</p>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card"><div id="statFollowers" class="stat-value">0</div><div class="stat-label">Followers</div></div>
+          <div class="stat-card"><div id="statFollowing" class="stat-value">0</div><div class="stat-label">Following</div></div>
+          <div class="stat-card"><div id="statLikes" class="stat-value">0</div><div class="stat-label">Total Likes</div></div>
+        </div>
+
+        <!-- Action Panel -->
+        <div class="action-panel">
+          <button class="btn-act btn-standard" onclick="applyEffect('standard')"><i class="fa-solid fa-bolt"></i> ACCOUNT UPGRADE</button>
+          <button class="btn-act btn-vip" onclick="applyEffect('vip')"><i class="fa-solid fa-crown"></i> VIP ACCOUNT ENHANCEMENT</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Bottom Control Bar -->
+  <div class="bottom-control-bar">
+    <button id="logoutBtn" class="logout-btn-only hidden" onclick="logout()" title="Logout">
+      <i class="fa-solid fa-right-from-bracket"></i> LOGOUT
+    </button>
+    <button class="btn-reset-data" onclick="resetAppData()"><i class="fa-solid fa-trash-can"></i> Reset Data</button>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="modal-card">
+      <i class="fa-solid fa-shield-halved" style="font-size: 34px; color: var(--accent-cyan);"></i>
+      <h2 style="margin: 10px 0 15px 0; font-size: 18px; letter-spacing: 1px;">LOGIN</h2>
+
+      <div class="form-group">
+        <label>USERNAME</label>
+        <input type="text" id="loginUser" placeholder="Enter username" onkeypress="handleLoginKeyPress(event)">
+      </div>
+      <div class="form-group">
+        <label>PASSWORD</label>
+        <input type="password" id="loginPass" placeholder="Enter password" onkeypress="handleLoginKeyPress(event)">
+      </div>
+
+      <div id="loginError" style="color: var(--accent-magenta); font-size: 11px; margin-bottom: 10px; display: none;">Invalid credentials!</div>
+
+      <button class="btn-scan" style="width: 100%; border-radius: 8px;" onclick="authenticate()">LOGIN</button>
+
+      <div class="login-contact-note">Contact telegram @Roiseso to sign-in</div>
+    </div>
+  </div>
+
+  <script>
+    const AUTHORIZED_USERS = [
+      { user: 'Roiseso', pass: '111111' },
+      { user: 'matrix_operator', pass: '123456' },
+      { user: 'quantum_booster', pass: '123456' },
+      { user: 'alpha_tester', pass: '123456' },
+      { user: 'tik_mod_vip', pass: '123456' }
+    ];
+
+    let currentTargetUser = '';
+    let recentTargets = [];
+    let currentProfileData = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUser = localStorage.getItem('tikpower_auth_user');
+      if (savedUser) {
+        document.getElementById('logoutBtn').classList.remove('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
+      }
+
+      const savedRecent = localStorage.getItem('tikpower_recent_targets');
+      if (savedRecent) {
+        recentTargets = JSON.parse(savedRecent);
+        renderRecentList();
+      }
+
+      const savedProfile = localStorage.getItem('tikpower_active_profile');
+      if (savedProfile) {
+        currentProfileData = JSON.parse(savedProfile);
+        renderTargetProfile(currentProfileData);
+      }
+    });
+
+    function handleLoginKeyPress(e) { if (e.key === 'Enter') authenticate(); }
+    function handleScanKeyPress(e) { if (e.key === 'Enter') fastScanUser(); }
+
+    function authenticate() {
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
+      const err = document.getElementById('loginError');
+
+      const found = AUTHORIZED_USERS.find(item => item.user === u && item.pass === p);
+
+      if (found) {
+        err.style.display = 'none';
+        document.getElementById('logoutBtn').classList.remove('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
+        localStorage.setItem('tikpower_auth_user', found.user);
+      } else {
+        err.style.display = 'block';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('tikpower_auth_user');
+      document.getElementById('logoutBtn').classList.add('hidden');
+      document.getElementById('loginModal').classList.remove('hidden');
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
+    }
+
+    /* LẤY TÊN THẬT VÀ AVATAR THẬT BẰNG TIKTOK OEMBED API */
+    async function fastScanUser(manualUsername = null) {
+      let username = manualUsername || document.getElementById('targetUsername').value.trim();
+      if (username.startsWith('@')) username = username.substring(1);
+      if (!username) return alert('Please enter a username!');
+
+      const btnScan = document.getElementById('btnScan');
+      btnScan.classList.add('scanning');
+
+      currentTargetUser = username;
+
+      // Đường dẫn API OEmbed chính thức của TikTok
+      const targetProfileUrl = `https://www.tiktok.com/@${username}`;
+      const oembedApi = `https://www.tiktok.com/oembed?url=${encodeURIComponent(targetProfileUrl)}`;
+
+      let realName = username;
+      let realAvatar = `https://ui-avatars.com/api/?name=${username}&background=00f2fe&color=000&bold=true`;
+
+      try {
+        const response = await fetch(oembedApi);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.author_name) realName = data.author_name;       // Tên hiển thị thực tế
+          if (data.thumbnail_url) realAvatar = data.thumbnail_url;  // Avatar thực tế
+        }
+      } catch (error) {
+        console.warn('Không lấy được dữ liệu chính thức, dùng dữ liệu mặc định:', error);
+      }
+
+      btnScan.classList.remove('scanning');
+
+      // Random các thông số phụ (Followers/Likes)
+      const followerVal = Math.floor(Math.random() * (110 - 7 + 1)) + 7;
+      const followingVal = Math.floor(Math.random() * (650 - 57 + 1)) + 57;
+      const likesVal = Math.floor(Math.random() * (210 - 10 + 1)) + 10;
+
+      currentProfileData = {
+        username: username,
+        realName: realName,
+        avatar: realAvatar,
+        followers: followerVal + 'K',
+        following: followingVal,
+        likes: likesVal + 'K'
+      };
+
+      localStorage.setItem('tikpower_active_profile', JSON.stringify(currentProfileData));
+      renderTargetProfile(currentProfileData);
+    }
+
+    function renderTargetProfile(data) {
+      currentTargetUser = data.username;
+      
+      const giantAvatarEl = document.getElementById('giantAvatar');
+      giantAvatarEl.src = data.avatar;
+      
+      giantAvatarEl.onerror = function() {
+        this.src = `https://ui-avatars.com/api/?name=${data.username}&background=00f2fe&color=000&bold=true`;
+      };
+
+      // Hiển thị tên hiển thị thật thay vì username
+      document.getElementById('targetNickname').innerText = data.realName || data.username;
+      document.getElementById('targetHandle').innerText = `@${data.username}`;
+      document.getElementById('statFollowers').innerText = data.followers;
+      document.getElementById('statFollowing').innerText = data.following;
+      document.getElementById('statLikes').innerText = data.likes;
+
+      resetAvatarEffects();
+      document.getElementById('targetDisplay').style.display = 'flex';
+    }
+
+    function addRecentTarget(username, realName, avatarUrl, boosted = false, isVip = false) {
+      recentTargets.unshift({ 
+        id: Date.now() + Math.random(),
+        username: username, 
+        realName: realName,
+        avatar: avatarUrl, 
+        boosted: boosted, 
+        isVip: isVip 
+      });
+
+      if (recentTargets.length > 15) recentTargets.pop();
+
+      localStorage.setItem('tikpower_recent_targets', JSON.stringify(recentTargets));
+      renderRecentList();
+    }
+
+    function renderRecentList() {
+      const container = document.getElementById('recentList');
+      container.innerHTML = '';
+
+      if (recentTargets.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-sub); font-size: 10px; text-align: center; padding: 15px 0;"><i class="fa-solid fa-ghost"></i> No targets scanned</div>`;
+        return;
+      }
+
+      recentTargets.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `recent-item ${item.isVip ? 'vip-target' : ''}`;
+        div.onclick = () => fastScanUser(item.username);
+
+        let badgeHtml = '';
+        if (item.boosted) {
+          badgeHtml = item.isVip 
+            ? `<i class="fa-solid fa-circle-check badge-tick vip" title="VIP Boosted"></i>`
+            : `<i class="fa-solid fa-circle-check badge-tick" title="Boosted"></i>`;
+        }
+
+        const fallback = `https://ui-avatars.com/api/?name=${item.username}&background=00f2fe&color=000&bold=true`;
+
+        div.innerHTML = `
+          <img class="recent-avatar" src="${item.avatar}" onerror="this.src='${fallback}'">
+          <div class="recent-info">
+            <span class="recent-name" title="${item.realName || item.username}">${item.realName || '@' + item.username}</span>
+            ${badgeHtml}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function resetAvatarEffects() {
+      const wrapper = document.getElementById('avatarWrapper');
+      wrapper.className = 'avatar-wrapper';
+      document.getElementById('boostStatusBox').classList.remove('active');
+    }
+
+    const hexChars = "0123456789ABCDEF#$@%";
+    function randomHex(length = 6) {
+      let res = "";
+      for (let i = 0; i < length; i++) {
+        res += hexChars[Math.floor(Math.random() * hexChars.length)];
+      }
+      return `[${res}]`;
+    }
+
+    function runGlitchRow(rowId, finalTag, duration) {
+      const row = document.getElementById(rowId);
+      const badge = row.querySelector('.badge');
+      row.className = 'status-row glitching';
+
+      const interval = setInterval(() => {
+        badge.innerText = randomHex(6);
+      }, 60);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        row.className = 'status-row done';
+        badge.innerText = finalTag;
+      }, duration);
+    }
+
+    function applyEffect(type) {
+      resetAvatarEffects();
+      const wrapper = document.getElementById('avatarWrapper');
+      const statusBox = document.getElementById('boostStatusBox');
+      const stdRows = document.getElementById('standardStatusRows');
+      const vipBox = document.getElementById('vipCounterBox');
+      const vipNumber = document.getElementById('vipCounterNumber');
+
+      const isVip = (type === 'vip');
+      const totalDuration = isVip ? 4500 : 3600;
+
+      statusBox.classList.add('active');
+
+      if (isVip) {
+        wrapper.classList.add('effect-vip');
+        stdRows.style.display = 'none';
+        vipBox.style.display = 'flex';
+
+        let count = 0;
+        const intervalTime = totalDuration / 100;
+        const timer = setInterval(() => {
+          count++;
+          vipNumber.innerText = `${count}%`;
+          if (count >= 100) clearInterval(timer);
+        }, intervalTime);
+
+      } else {
+        wrapper.classList.add('effect-standard');
+        stdRows.style.display = 'flex';
+        vipBox.style.display = 'none';
+
+        runGlitchRow('rowFollower', '[OVERWRITTEN]', 1200);
+        runGlitchRow('rowViewer', '[STREAMING]', 2400);
+        runGlitchRow('rowLike', '[VERIFIED]', 3600);
+      }
+
+      setTimeout(() => {
+        showIosNotification(isVip ? `VIP Enhancement active for @${currentTargetUser}` : `Account Upgrade complete for @${currentTargetUser}`);
+        statusBox.classList.remove('active');
+
+        addRecentTarget(currentTargetUser, currentProfileData.realName, currentProfileData.avatar, true, isVip);
+        document.getElementById('targetUsername').value = '';
+
+      }, totalDuration + 400);
+    }
+
+    function showIosNotification(text) {
+      const notif = document.getElementById('iosNotification');
+      document.getElementById('iosBody').innerText = text;
+      notif.classList.add('show');
+      setTimeout(() => notif.classList.remove('show'), 4500);
+    }
+
+    function resetAppData() {
+      if (confirm("Reset all stored app data and clear recent targets?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
